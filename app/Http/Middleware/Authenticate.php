@@ -15,7 +15,9 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            return route('login');
+            throw ValidationException::withMessages([
+                'loginFailed' =>['IDまたはパスワードが間違っています。']
+            ]);
         }
     }
 }

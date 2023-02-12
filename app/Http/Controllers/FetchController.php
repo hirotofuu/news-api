@@ -50,7 +50,7 @@ class FetchController extends Controller
     // mypageの記事
     public function fetchMyArticle($request){
         try{
-            $article=Article::with('user')->orderBy('id', 'DESC')->where('secret_id', $request)->get();
+            $article=Article::with('user')->orderBy('id', 'DESC')->where('user_id', $request)->get();
         }catch(Exception $e){
             throw $e;
         }

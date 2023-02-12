@@ -38,11 +38,12 @@ Route::middleware('auth:sanctum')->get('/user', function() {
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
-
-Route::post('/create', [ArticleController::class, 'createArticle']);
-Route::delete('/deleteArticle/{id}', [ArticleController::class, 'deleteArticle']);
-Route::middleware('auth:sanctum')->post('/editArticleText', [ArticleController::class, 'editArticle']);
-Route::middleware('auth:sanctum')->post('/editArticlePic', [ArticleController::class, 'editArticlePic']);
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::post('/create', [ArticleController::class, 'createArticle']);
+    Route::post('/editArticleText', [ArticleController::class, 'editArticle']);
+    Route::post('/editArticlePic', [ArticleController::class, 'editArticlePic']);
+    Route::delete('/deleteArticle/{id}', [ArticleController::class, 'deleteArticle']);
+});
 
 
 Route::get('/indexFetch', [FetchController::class, 'fetchIndex']);
@@ -56,24 +57,26 @@ Route::get('/fetchMypageInfo/{id}', [FetchController::class, 'fetchMypageInfo'])
 Route::get('/fetchMyArticle/{user_id}', [FetchController::class, 'fetchMyArticle']);
 Route::get('/fetchTimeline/{user_id}', [FetchController::class, 'timeline']);
 
-
-Route::post('/createComment', [CommentController::class, 'createComment']);
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::post('/createComment', [CommentController::class, 'createComment']);
+    Route::delete('/deleteComment/{id}', [CommentController::class, 'deleteComment']);
+});
 Route::get('/fetchComments/{id}', [CommentController::class, 'fetchComments']);
 Route::get('/fetchUserComments/{id}', [CommentController::class, 'fetchUserComments']);
 Route::get('/fetchMyComments', [CommentController::class, 'fetchMyComments']);
-Route::delete('/deleteComment/{id}', [CommentController::class, 'deleteComment']);
 
-Route::get('/goodSend/{id}', [EvaluateController::class, 'good']);
-Route::delete('/unGoodSend/{id}', [EvaluateController::class, 'ungood']);
-Route::get('/truthSend/{id}', [EvaluateController::class, 'truth']);
-Route::delete('/unTruthSend/{id}', [EvaluateController::class, 'untruth']);
-Route::get('/fakeSend/{id}', [EvaluateController::class, 'fake']);
-Route::middleware('auth:sanctum')->delete('/unFakeSend/{id}', [EvaluateController::class, 'unfake']);
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('/goodSend/{id}', [EvaluateController::class, 'good']);
+    Route::delete('/unGoodSend/{id}', [EvaluateController::class, 'ungood']);
+    Route::get('/truthSend/{id}', [EvaluateController::class, 'truth']);
+    Route::delete('/unTruthSend/{id}', [EvaluateController::class, 'untruth']);
+    Route::get('/fakeSend/{id}', [EvaluateController::class, 'fake']);
+    Route::delete('/unFakeSend/{id}', [EvaluateController::class, 'unfake']);
 
 
-Route::get('/followSend/{id}', [FollowController::class, 'follow']);
-Route::delete('/unFollowSend/{id}', [FollowController::class, 'unfollow']);
+    Route::get('/followSend/{id}', [FollowController::class, 'follow']);
+    Route::delete('/unFollowSend/{id}', [FollowController::class, 'unfollow']);
+});
 
-Route::get('/following/{id}', [FollowController::class, 'followingFetch']);
-Route::get('/follower/{id}', [FollowController::class, 'followerFetch']);
-
+    Route::get('/following/{id}', [FollowController::class, 'followingFetch']);
+    Route::get('/follower/{id}', [FollowController::class, 'followerFetch']);
