@@ -6,13 +6,15 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CreateRequest;
 use App\Models\Article;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
     public function createArticle(CreateRequest $request){
         if($request->file('file')!==null){
             $file= $request->file('file');
-            $file_name=$file->getClientOriginalName();
+            $path = Storage::disk('s3')->putFile('/', $file);
+            $file_name = Storage::disk('s3')->url($path);
             Article::create([
                 'title' => $request->title,
                 'content' => $request->content,
