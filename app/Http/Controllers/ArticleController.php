@@ -13,8 +13,7 @@ class ArticleController extends Controller
     public function createArticle(CreateRequest $request){
         if($request->file('file')!==null){
             $file= $request->file('file');
-            $path = Storage::disk('s3')->putFile('/', $file);
-            $file_name = Storage::disk('s3')->url($path);
+            $file_name = Storage::disk('s3')->putFile('article', $file, 'public');
             Article::create([
                 'title' => $request->title,
                 'content' => $request->content,
@@ -37,28 +36,12 @@ class ArticleController extends Controller
     }
 
     public function deleteArticle ($request){
-        $comment=Article::where('id', $request);
-        $comment->delete();
+        $article=Article::where('id', $request)->first();
+        Storage::disk('s3')->delete($article->image_file);
+        $article->delete();
         return back();
     }
 
-    public function editArticlePict ($request){
-        if($request->file('file')!==null){
-            $file= $request->file('file');
-            $file_name=$file->getClientOriginalName();
-
-            Article::where('id', $request)
-            ->update([
-                'image_file' => $file_name,
-            ]);
-        }else{
-            Article::where('id', $request)
-            ->update([
-                'image_file' => null,
-            ]);
-        }
-
-    }
 
 
     public function editArticle (Request $request){
@@ -74,14 +57,25 @@ class ArticleController extends Controller
     }
 
     public function editArticlePic (Request $request){
-        if($request->file('file')!==null){
+        $article=Article::where('id', $request->id)->first();
+        if($article->iamge_file===null){
             $file= $request->file('file');
-            $file_name=$file->getClientOriginalName();
+            $file_name = Storage::disk('s3')->putFile('article', $file, 'public');
+            Article::where('id', $request->id)
+            ->update([
+                'image_file'=>$file_name,
+            ]);
+        }
+        else if($request->file('file')!==null){
+            Storage::disk('s3')->delete($article->image_file);
+            $file= $request->file('file');
+            $file_name = Storage::disk('s3')->putFile('article', $file, 'public');
             Article::where('id', $request->id)
             ->update([
                 'image_file'=>$file_name,
             ]);
         }else{
+            Storage::disk('s3')->delete($article->image_file);
             Article::where('id', $request->id)
             ->update([
                 'image_file'=>null,
