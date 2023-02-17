@@ -14,9 +14,7 @@ class GoodResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'id'=>$this->id,
-            'user_id'=>$this->user_id,
-        ];
+        return
+            $this->user_id;
     }
 }

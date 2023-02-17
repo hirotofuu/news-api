@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\GoodResource;
 
 class IndexArticleResource extends JsonResource
 {
@@ -24,8 +25,8 @@ class IndexArticleResource extends JsonResource
             'user_id'=>$this->user_id,
             'user_name'=>$this->user->name,
             'category'=>$this->category,
-            'is_truth'=>$this->truths,
-            'is_fake'=>$this->fakes,
+            'is_truth'=>GoodResource::collection($this->truths),
+            'is_fake'=>GoodResource::collection($this->fakes),
             'truth_number'=>$this->truths->count(),
             'fake_number'=>$this->fakes->count(),
         ];

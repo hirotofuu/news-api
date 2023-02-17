@@ -3,9 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\UserResource;
 
-class FollowerResource extends JsonResource
+class FolloweIdResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +14,7 @@ class FollowerResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'follower'=>UserResource::collection($this->followers),
-        ];
-
+        return
+            $this->id;
     }
 }

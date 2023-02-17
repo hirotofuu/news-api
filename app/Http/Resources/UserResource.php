@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\FollResource;
+use App\Http\Resources\FolloweIdResource;
 
 class UserResource extends JsonResource
 {
@@ -21,7 +21,7 @@ class UserResource extends JsonResource
             'api_token'=>$this->api_token,
             'truth_number'=>$this->truths->count(),
             'fake_number'=>$this->fakes->count(),
-            'following'=>$this->followers,
+            'following'=>FolloweIdResource::collection($this->followers),
             'following_number'=>$this->followings->count(),
             'follower_number'=>$this->followers->count(),
         ];
