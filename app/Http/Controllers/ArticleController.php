@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateRequest;
+use App\Http\Requests\ImageSizeRequest;
 use App\Models\Article;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -37,7 +38,9 @@ class ArticleController extends Controller
 
     public function deleteArticle ($request){
         $article=Article::where('id', $request)->first();
-        Storage::disk('s3')->delete($article->image_file);
+        if($article->image_file!==null){
+            Storage::disk('s3')->delete($article->image_file);
+        }
         $article->delete();
         return back();
     }
@@ -56,28 +59,32 @@ class ArticleController extends Controller
 
     }
 
-    public function editArticlePic (Request $request){
+    public function editArticlePic (ImageSizeRequest $request){
         $article=Article::where('id', $request->id)->first();
         if($article->iamge_file===null){
+            if($request->file('file')===null){
+                $article->update([
+                    'image_file'=>null,
+                ]);
+                return;
+            }
             $file= $request->file('file');
             $file_name = Storage::disk('s3')->putFile('article', $file, 'public');
-            Article::where('id', $request->id)
-            ->update([
+            $article->update([
                 'image_file'=>$file_name,
             ]);
+            return;
         }
         else if($request->file('file')!==null){
             Storage::disk('s3')->delete($article->image_file);
             $file= $request->file('file');
             $file_name = Storage::disk('s3')->putFile('article', $file, 'public');
-            Article::where('id', $request->id)
-            ->update([
+            $article->update([
                 'image_file'=>$file_name,
             ]);
-        }else{
+        }else if($request->file('file')===null){
             Storage::disk('s3')->delete($article->image_file);
-            Article::where('id', $request->id)
-            ->update([
+            $article->update([
                 'image_file'=>null,
             ]);
         }

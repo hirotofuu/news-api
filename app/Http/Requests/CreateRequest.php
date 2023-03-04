@@ -24,10 +24,10 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'=>['required', 'max:100'],
+            'title'=>['required', 'max:240'],
             'content'=>['required', 'min:50', 'max:10000'],
             'category'=>['required'],
-            'file_image'=>['file','max:1'],
+            'file'=>['max:5120'],
             'comments_open'=>['required'],
             ];
     }
@@ -35,12 +35,7 @@ class CreateRequest extends FormRequest
     public function messages()
     {
         return [
-            'required' => '必須入力です。',
-            'min:50' => '50字以上で入力してください',
-            'min:100' => '100字以内で入力してください',
-            'max:10000' => '10000字以内で入力してください',
-            'file' => 'upload file',
-            'max:1' => '10MB',
+
             ];
 
     }

@@ -3,8 +3,11 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
-class RegisterRequest extends FormRequest
+
+class ProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,15 +27,15 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>['required', 'unique:users'],
-            'email'=>['required', 'email', 'unique:users'],
-            'password'=>['required', 'regex:/\A([a-zA-Z0-9]{8,})+\z/u', 'confirmed'],
+            'name'=>['max:50', 'required', Rule::unique('users')->ignore($this->id)],
+            'profile'=>['max:250'],
         ];
     }
 
     public function messages()
     {
         return [
+
 
         ];
 

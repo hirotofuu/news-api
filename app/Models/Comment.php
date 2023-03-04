@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Article;
 use App\Models\User;
 use App\Models\Good;
+use App\Models\Comment;
 
 class Comment extends Model
 {
@@ -17,6 +18,9 @@ class Comment extends Model
         'day_time',
         'user_id',
         'article_id',
+        'parent_id',
+        'child_number'
+
     ];
 
     public function user()
@@ -34,5 +38,8 @@ class Comment extends Model
     {
         return $this->hasMany(Good::class);
     }
+
+
+
 
 }

@@ -22,7 +22,6 @@ class Article extends Model
         'day_time',
         'view_number',
         'user_id',
-        "secret_id",
     ];
 
     public function user()

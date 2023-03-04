@@ -50,7 +50,7 @@ class FetchController extends Controller
     // mypageの記事
     public function fetchMyArticle($request){
         try{
-            $article=Article::with('user')->orderBy('id', 'DESC')->where('user_id', $request)->get();
+            $article=Article::with('user')->orderBy('id', 'DESC')->where("user_id",$request)->get();
         }catch(Exception $e){
             throw $e;
         }
@@ -91,7 +91,7 @@ class FetchController extends Controller
     // timeline
     public function timeline($request) {
         try{
-            $article=Article::with('user')->whereIn('user_id', Foll::where('followed_id', $request)->pluck('following_id'))->get();
+            $article=Article::with('user')->whereIn('user_id', Foll::where('followed_id', $request)->pluck('following_id'))->orderBy('id', 'DESC')->get();
         }catch(Exception $e){
             throw $e;
         }
@@ -104,6 +104,11 @@ class FetchController extends Controller
     // 詳細取得
     public function showArticle($article){
         $syosai=Article::with('truths')->with('fakes')->find($article);
+        if(Auth::id()!==$syosai->user_id){
+            $syosai->update([
+                'view_number'=>$syosai->view_number+1,
+            ]);
+        }
         return new IndexArticleResource($syosai);
     }
 

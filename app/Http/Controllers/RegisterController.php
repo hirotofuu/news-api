@@ -17,13 +17,17 @@ class RegisterController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'api_token' => Str::random(60),
+            'secret_id' => sha1(uniqid(rand(), true)),
         ]);
-        $credentials = $request->only('email', 'password');
-        if (Auth::attempt($credentials)){
+
+             if (Auth::attempt($request->all())){
             $request->session()->regenerate();
             return new UserResource(Auth::user());
+
         }
+
+
+
     }
 
 
