@@ -54,6 +54,13 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
             Route::delete('/deleteArticle/{id}', [ArticleController::class, 'deleteArticle']);
         });
 
+        Route::group(['middleware' => ["auth:sanctum"]], function () {
+            Route::get('/fetchMypageInfo/{id}', [FetchController::class, 'fetchMypageInfo']);
+        });
+        Route::get('/titleFetch/{article}', [FetchController::class, 'titleArticle']);
+        Route::get('/editTextFetch/{article}', [FetchController::class, 'editTextArticle']);
+        Route::get('/editPicFetch/{article}', [FetchController::class, 'editPicArticle']);
+        Route::get('/recommendFetch/{category}', [FetchController::class, 'fetchRecommend']);
         Route::get('/indexFetch', [FetchController::class, 'fetchIndex']);
         Route::get('/showFetch/{article}', [FetchController::class, 'showArticle']);
         Route::get('/categoryFetch/{category}', [FetchController::class, 'fetchCategory']);
@@ -61,7 +68,6 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
         Route::get('/fetchUserArticle/{user_id}', [FetchController::class, 'fetchUserArticle']);
         Route::get('/fetchUserSearch/{name}', [FetchController::class, 'fetchUserSerch']);
         Route::get('/fetchUserInfo/{user_id}', [FetchController::class, 'fetchUserInfo']);
-        Route::get('/fetchMypageInfo/{id}', [FetchController::class, 'fetchMypageInfo']);
         Route::group(['middleware' => ["auth:sanctum"]], function () {
             Route::get('/fetchMyArticle/{user_id}', [FetchController::class, 'fetchMyArticle']);
         });

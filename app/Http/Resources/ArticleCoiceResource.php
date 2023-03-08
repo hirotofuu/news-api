@@ -2,13 +2,10 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Models\Good;
-use App\Http\Resources\GoodResource;
-class CommentResource extends JsonResource
-{
 
+class ArticleCoiceResource extends JsonResource
+{
     /**
      * Transform the resource into an array.
      *
@@ -19,16 +16,12 @@ class CommentResource extends JsonResource
     {
         return [
             'id'=>$this->id,
-            'parent_id'=>$this->parent_id,
-            'comment'=>$this->comment,
-            'user_id'=>$this->user_id,
+            'title'=>$this->title,
             'day_time'=>$this->day_time,
+            'view_number'=>$this->view_number,
+            'image_file'=>$this->image_file,
             'user_name'=>$this->user->name,
-            'child_number'=>$this->child_number,
             'avatar_image'=>$this->user->avatar_image,
-            'article_id'=>$this->article_id,
-            'is_good'=>GoodResource::collection($this->goods),
-            'good_number'=>$this->goods->count(),
         ];
     }
 }

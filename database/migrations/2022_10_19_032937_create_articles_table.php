@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->longText('content');
+            $table->text('source')->nullable();
             $table->string('category');
             $table->string('image_file')->nullable();
             $table->string('comments_open');

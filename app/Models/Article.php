@@ -16,6 +16,7 @@ class Article extends Model
     protected $fillable = [
         'title',
         'content',
+        'source',
         'category',
         'image_file',
         'comments_open',

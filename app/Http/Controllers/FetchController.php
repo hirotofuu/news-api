@@ -10,6 +10,10 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\IndexArticleResource;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\ArticleCoiceResource;
+use App\Http\Resources\EditTextResource;
+use App\Http\Resources\EditPicResource;
+use App\Http\Requests\EditTextRequest;
 use Illuminate\Support\Facades\DB;
 
 
@@ -22,7 +26,7 @@ class FetchController extends Controller
         }catch(Exception $e){
             throw $e;
         }
-        return IndexArticleResource::collection($article);
+        return ArticleCoiceResource::collection($article);
     }
 
 
@@ -33,7 +37,7 @@ class FetchController extends Controller
         }catch(Exception $e){
             throw $e;
         }
-        return IndexArticleResource::collection($article);
+        return ArticleCoiceResource::collection($article);
     }
 
 
@@ -44,7 +48,7 @@ class FetchController extends Controller
         }catch(Exception $e){
             throw $e;
         }
-        return IndexArticleResource::collection($article);
+        return ArticleCoiceResource::collection($article);
     }
 
     // mypageの記事
@@ -54,7 +58,7 @@ class FetchController extends Controller
         }catch(Exception $e){
             throw $e;
         }
-        return IndexArticleResource::collection($article);
+        return ArticleCoiceResource::collection($article);
     }
 
 
@@ -69,7 +73,7 @@ class FetchController extends Controller
                     $query = $query->where(DB::raw("CONCAT(title, ' ', content)"), 'like', '%' . $escape_word . '%');//like検索
                 }
             }
-            $articles = $query->get();
+            $articles = $query->orderBy('id', 'DESC')->get();
         }catch(Exception $e){
             throw $e;
         }
@@ -95,13 +99,13 @@ class FetchController extends Controller
         }catch(Exception $e){
             throw $e;
         }
-        return IndexArticleResource::collection($article);
+        return ArticleCoiceResource::collection($article);
     }
 
 
 
 
-    // 詳細取得
+    // 詳細
     public function showArticle($article){
         $syosai=Article::with('truths')->with('fakes')->find($article);
         if(Auth::id()!==$syosai->user_id){
@@ -111,6 +115,36 @@ class FetchController extends Controller
         }
         return new IndexArticleResource($syosai);
     }
+
+
+    // 画像編集
+    public function editPicArticle($article){
+        $syosai=Article::find($article);
+        return new EditPicResource($syosai);
+    }
+
+    public function editTextArticle($article){
+        $syosai=Article::find($article);
+        return new EditTextResource($syosai);
+    }
+
+    // たいとru
+    public function titleArticle($article){
+        $syosai=Article::find($article);
+        return new ArticleCoiceResource($syosai);
+    }
+
+
+    // 記事レコメンド
+    public function fetchRecommend($request){
+        try{
+            $article=Article::with('user')->inRandomOrder()->where('category', $request)->take(10)->get();
+        }catch(Exception $e){
+            throw $e;
+        }
+        return ArticleCoiceResource::collection($article);
+    }
+
 
 
 

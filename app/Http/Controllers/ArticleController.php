@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateRequest;
 use App\Http\Requests\ImageSizeRequest;
+use App\Http\Requests\EditTextRequest;
 use App\Models\Article;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -18,6 +19,7 @@ class ArticleController extends Controller
             Article::create([
                 'title' => $request->title,
                 'content' => $request->content,
+                'source' => $request->source,
                 'category' => $request->category,
                 'comments_open' => $request->comments_open,
                 'day_time' => $request->day_time,
@@ -28,6 +30,7 @@ class ArticleController extends Controller
             Article::create([
                 'title' => $request->title,
                 'content' => $request->content,
+                'source' => $request->source,
                 'category' => $request->category,
                 'comments_open' => $request->comments_open,
                 'day_time' => $request->day_time,
@@ -47,12 +50,13 @@ class ArticleController extends Controller
 
 
 
-    public function editArticle (Request $request){
+    public function editArticle (EditTextRequest $request){
 
         Article::where('id', $request->id)
         ->update([
             'title' => $request->title,
             'content' => $request->content,
+            'source' => $request->source,
             'category' => $request->category,
             'comments_open' => $request->comments_open,
         ]);
@@ -61,6 +65,9 @@ class ArticleController extends Controller
 
     public function editArticlePic (ImageSizeRequest $request){
         $article=Article::where('id', $request->id)->first();
+        if($article->iamge_file===$request->file('file')){
+            return;
+        }
         if($article->iamge_file===null){
             if($request->file('file')===null){
                 $article->update([
@@ -75,7 +82,7 @@ class ArticleController extends Controller
             ]);
             return;
         }
-        else if($request->file('file')!==null){
+        if($request->file('file')!==null){
             Storage::disk('s3')->delete($article->image_file);
             $file= $request->file('file');
             $file_name = Storage::disk('s3')->putFile('article', $file, 'public');

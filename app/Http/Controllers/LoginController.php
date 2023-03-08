@@ -38,7 +38,7 @@ class LoginController extends Controller
 
     public function updateProfile (ImageSizeRequest $request){
         $user=User::where('id', $request->id)->first();
-        if($user->avatar_image){
+        if($user->avatar_image!=='avatar/no-image-icon-23479.png'){
             Storage::disk('s3')->delete($user->avatar_image);
         }
         $file= $request->file('file');
