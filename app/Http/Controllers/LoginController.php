@@ -15,7 +15,6 @@ class LoginController extends Controller
     {
 
         if (Auth::attempt($request->all())){
-            $request->session()->regenerate();
             return new UserResource(Auth::user());
 
         }
@@ -29,10 +28,6 @@ class LoginController extends Controller
     {
 
         Auth::logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
         return ;
     }
 

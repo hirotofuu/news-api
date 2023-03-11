@@ -16,13 +16,13 @@ class EvaluateController extends Controller
             'comment_id' => $request,
             'user_id' =>\Auth::id(),
         ]);
-        return back();
+
     }
 
     public function ungood ($request){
         $good=Good::where('comment_id', $request)->where('user_id', \Auth::id())->first();
         $good->delete();
-        return back();
+
     }
 
 
@@ -33,13 +33,13 @@ class EvaluateController extends Controller
             'article_id' => $request,
             'user_id' =>\Auth::id(),
         ]);
-        return back();
+
     }
 
     public function untruth ($request){
         $good=Truth::where('article_id', $request)->where('user_id', \Auth::id())->first();
         $good->delete();
-        return back();
+
     }
 
 
@@ -49,13 +49,13 @@ class EvaluateController extends Controller
             'article_id' => $request,
             'user_id' =>\Auth::id(),
         ]);
-        return redirect('/');
+
     }
 
     public function unfake ($request){
         $good=Fake::where('article_id', $request)->where('user_id', \Auth::id())->first();
         $good->delete();
-        return back();
+
     }
 
 

@@ -25,16 +25,13 @@ use App\Http\Resources\UserResource;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user()->with('followings')->with('truths')->with('fakes');
-});
 
-Route::group(['middleware' => ["auth:sanctum"]], function () {
-    Route::middleware('auth:sanctum')->get('/user', function() {
+
+    Route::get('/user', function() {
         $user = Auth::user();
         return new UserResource($user);
     });
-});
+
 
 
 
@@ -42,21 +39,20 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
         Route::post('/register', [RegisterController::class, 'register']);
         Route::post('/login', [LoginController::class, 'login']);
         Route::post('/logout', [LoginController::class, 'logout']);
-        Route::group(['middleware' => ["auth:sanctum"]], function () {
+        Route::group(['middleware' => ["auth:api"]], function () {
             Route::post('/editProfile', [LoginController::class, 'updateProfile']);
             Route::post('/editTextProfile', [LoginController::class, 'updateTextProfile']);
         });
 
-        Route::group(['middleware' => ["auth:sanctum"]], function () {
+        Route::group(['middleware' => ['auth:api']], function () {
             Route::post('/create', [ArticleController::class, 'createArticle']);
             Route::post('/editArticleText', [ArticleController::class, 'editArticle']);
             Route::post('/editArticlePic', [ArticleController::class, 'editArticlePic']);
             Route::delete('/deleteArticle/{id}', [ArticleController::class, 'deleteArticle']);
         });
 
-        Route::group(['middleware' => ["auth:sanctum"]], function () {
-            Route::get('/fetchMypageInfo/{id}', [FetchController::class, 'fetchMypageInfo']);
-        });
+
+        Route::get('/fetchMypageInfo/{id}', [FetchController::class, 'fetchMypageInfo']);
         Route::get('/titleFetch/{article}', [FetchController::class, 'titleArticle']);
         Route::get('/editTextFetch/{article}', [FetchController::class, 'editTextArticle']);
         Route::get('/editPicFetch/{article}', [FetchController::class, 'editPicArticle']);
@@ -68,12 +64,12 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
         Route::get('/fetchUserArticle/{user_id}', [FetchController::class, 'fetchUserArticle']);
         Route::get('/fetchUserSearch/{name}', [FetchController::class, 'fetchUserSerch']);
         Route::get('/fetchUserInfo/{user_id}', [FetchController::class, 'fetchUserInfo']);
-        Route::group(['middleware' => ["auth:sanctum"]], function () {
+        Route::group(['middleware' => ['auth:api']], function () {
             Route::get('/fetchMyArticle/{user_id}', [FetchController::class, 'fetchMyArticle']);
         });
         Route::get('/fetchTimeline/{user_id}', [FetchController::class, 'timeline']);
 
-        Route::group(['middleware' => ["auth:sanctum"]], function () {
+        Route::group(['middleware' => ['auth:api']], function () {
             Route::post('/createComment', [CommentController::class, 'createComment']);
             Route::post('/replyComment', [CommentController::class, 'replyComment']);
             Route::delete('/deleteComment/{id}', [CommentController::class, 'deleteComment']);
@@ -81,9 +77,10 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
         Route::get('/fetchComments/{id}', [CommentController::class, 'fetchComments']);
         Route::get('/fetchReplyCommens/{parent_id}', [CommentController::class, 'fetchReplyComments']);
         Route::get('/fetchUserComments/{id}', [CommentController::class, 'fetchUserComments']);
-        Route::get('/fetchMyComments/{user_id}', [CommentController::class, 'fetchMyComments']);
-
-        Route::group(['middleware' => ["auth:sanctum"]], function () {
+        Route::group(['middleware' => ['auth:api']], function () {
+            Route::get('/fetchMyComments/{user_id}', [CommentController::class, 'fetchMyComments']);
+        });
+        Route::group(['middleware' => ['auth:api']], function () {
             Route::get('/goodSend/{id}', [EvaluateController::class, 'good']);
             Route::delete('/unGoodSend/{id}', [EvaluateController::class, 'ungood']);
             Route::get('/truthSend/{id}', [EvaluateController::class, 'truth']);

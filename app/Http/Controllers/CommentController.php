@@ -81,8 +81,14 @@ class CommentController extends Controller
     }
 
     public function deleteComment ($request){
-        $comment=Comment::where('id', $request);
+        $comment=Comment::where('id', $request)->first();
+        if($comment->parent_id){
+            $parent_comment=Comment::where('id', $comment->parent_id)->first();
+            $num=$parent_comment->child_number;
+            $parent_comment->update([
+                'child_number' => $num-1,
+            ]);
+        }
         $comment->delete();
-        return back();
     }
 }
