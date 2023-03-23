@@ -27,17 +27,21 @@ use App\Http\Resources\UserResource;
 
 
 
-    Route::get('/user', function() {
-        $user = Auth::user();
-        return new UserResource($user);
-    });
+
+
+
+
+
+
 
 
 
 
 
         Route::post('/register', [RegisterController::class, 'register']);
+        Route::post('/user', [LoginController::class, 'user']);
         Route::post('/login', [LoginController::class, 'login']);
+        Route::get('/userdayo/{password}', [LoginController::class, 'login_return']);
         Route::post('/logout', [LoginController::class, 'logout']);
         Route::group(['middleware' => ["auth:api"]], function () {
             Route::post('/editProfile', [LoginController::class, 'updateProfile']);
@@ -81,14 +85,14 @@ use App\Http\Resources\UserResource;
             Route::get('/fetchMyComments/{user_id}', [CommentController::class, 'fetchMyComments']);
         });
         Route::group(['middleware' => ['auth:api']], function () {
-            Route::get('/goodSend/{id}', [EvaluateController::class, 'good']);
-            Route::delete('/unGoodSend/{id}', [EvaluateController::class, 'ungood']);
-            Route::get('/truthSend/{id}', [EvaluateController::class, 'truth']);
-            Route::delete('/unTruthSend/{id}', [EvaluateController::class, 'untruth']);
-            Route::get('/fakeSend/{id}', [EvaluateController::class, 'fake']);
-            Route::delete('/unFakeSend/{id}', [EvaluateController::class, 'unfake']);
-            Route::get('/followSend/{id}', [FollowController::class, 'follow']);
-            Route::delete('/unFollowSend/{id}', [FollowController::class, 'unfollow']);
+            Route::post('/goodSend/{id}/{user_id}', [EvaluateController::class, 'good']);
+            Route::delete('/unGoodSend/{id}/{user_id}', [EvaluateController::class, 'ungood']);
+            Route::get('/truthSend/{id}/{user_id}', [EvaluateController::class, 'truth']);
+            Route::delete('/unTruthSend/{id}/{user_id}', [EvaluateController::class, 'untruth']);
+            Route::get('/fakeSend/{id}/{user_id}', [EvaluateController::class, 'fake']);
+            Route::delete('/unFakeSend/{id}/{user_id}', [EvaluateController::class, 'unfake']);
+            Route::get('/followSend/{id}/{followed_id}', [FollowController::class, 'follow']);
+            Route::delete('/unFollowSend/{id}/{followed_id}', [FollowController::class, 'unfollow']);
         });
 
             Route::get('/following/{id}', [FollowController::class, 'followingFetch']);

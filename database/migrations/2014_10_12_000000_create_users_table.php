@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('avatar_image')->default('avatar/no-image-icon-23479.png');
             $table->string('profile')->default('')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password')->nullable();
+            $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });

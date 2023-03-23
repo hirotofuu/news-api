@@ -24,7 +24,7 @@ class ArticleController extends Controller
                 'comments_open' => $request->comments_open,
                 'day_time' => $request->day_time,
                 'image_file'=>$file_name,
-                'user_id'=> \Auth::id(),
+                'user_id'=> $request->user_id,
             ]);
         }else{
             Article::create([
@@ -34,7 +34,7 @@ class ArticleController extends Controller
                 'category' => $request->category,
                 'comments_open' => $request->comments_open,
                 'day_time' => $request->day_time,
-                'user_id'=> \Auth::id(),
+                'user_id'=> $request->user_id,
             ]);
         }
     }

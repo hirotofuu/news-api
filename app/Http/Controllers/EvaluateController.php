@@ -11,16 +11,16 @@ use App\Models\Fake;
 class EvaluateController extends Controller
 {
     // good setting
-    public function good($request){
+    public function good(Request $request){
         Good::create([
-            'comment_id' => $request,
-            'user_id' =>\Auth::id(),
+            'comment_id' => $request->id,
+            'user_id' =>$request->user_id,
         ]);
 
     }
 
-    public function ungood ($request){
-        $good=Good::where('comment_id', $request)->where('user_id', \Auth::id())->first();
+    public function ungood (Request $request){
+        $good=Good::where('comment_id', $request->id)->where('user_id', $request->user_id)->first();
         $good->delete();
 
     }
@@ -28,32 +28,32 @@ class EvaluateController extends Controller
 
 
     // truth settings
-    public function truth($request){
+    public function truth(Request $request){
         Truth::create([
-            'article_id' => $request,
-            'user_id' =>\Auth::id(),
+            'article_id' => $request->id,
+            'user_id' =>$request->user_id,
         ]);
 
     }
 
-    public function untruth ($request){
-        $good=Truth::where('article_id', $request)->where('user_id', \Auth::id())->first();
+    public function untruth (Request $request){
+        $good=Truth::where('article_id', $request->id)->where('user_id', $request->user_id)->first();
         $good->delete();
 
     }
 
 
     // fake settings
-    public function fake($request){
+    public function fake(Request $request){
         Fake::create([
-            'article_id' => $request,
-            'user_id' =>\Auth::id(),
+            'article_id' => $request->id,
+            'user_id' =>$request->user_id,
         ]);
 
     }
 
-    public function unfake ($request){
-        $good=Fake::where('article_id', $request)->where('user_id', \Auth::id())->first();
+    public function unfake (Request $request){
+        $good=Fake::where('article_id', $request->id)->where('user_id', $request->user_id)->first();
         $good->delete();
 
     }

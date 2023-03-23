@@ -23,12 +23,14 @@ class LoginController extends Controller
             'loginFailed' =>['IDまたはパスワードが間違っています。']
         ]);
     }
+    public function  user(){
+        $user = Auth::user();
+        return $user ? new UserResource($user) : null;
+    }
 
-    public function logout(Request $request)
-    {
-
-        Auth::logout();
-        return ;
+    public function login_return($request){
+        $user=User::where('password', $request)->first();
+        return $user ? new UserResource($user) : null;
     }
 
     public function updateProfile (ImageSizeRequest $request){
@@ -50,5 +52,6 @@ class LoginController extends Controller
             'name'=>$request->name,
             'profile'=>$request->profile,
         ]);
+
     }
 }

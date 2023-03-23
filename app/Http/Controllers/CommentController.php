@@ -49,7 +49,7 @@ class CommentController extends Controller
         $model=$comment->create([
                 'comment' => $request->comment,
                 'day_time' => $request->day_time,
-                'user_id'=> \Auth::id(),
+                'user_id'=> $request->user_id,
                 'article_id'=>$request->article_id,
             ]);
             return ($model->id);
@@ -60,7 +60,7 @@ class CommentController extends Controller
         $model=$comment->create([
                 'comment' => $request->comment,
                 'day_time' => $request->day_time,
-                'user_id'=> \Auth::id(),
+                'user_id'=> $request->user_id,
                 'article_id'=>$request->article_id,
                 'parent_id'=> $request->parent_id,
             ]);

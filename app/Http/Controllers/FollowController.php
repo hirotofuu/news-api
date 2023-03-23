@@ -11,18 +11,16 @@ use App\Http\Resources\UserResource;
 
 class FollowController extends Controller
 {
-    public function follow($request){
+    public function follow(Request $request){
         Foll::create([
-            'following_id' => $request,
-            'followed_id' =>\Auth::id(),
+            'following_id' => $request->id,
+            'followed_id' => $request->followed_id,
         ]);
-        return back();
     }
 
-    public function unfollow ($request){
-        $foll=Foll::where('following_id', $request)->where('followed_id', \Auth::id())->first();
+    public function unfollow (Request $request){
+        $foll=Foll::where('following_id', $request->id)->where('followed_id', $request->followed_id)->first();
         $foll->delete();
-        return back();
     }
 
     public function followingFetch($request){

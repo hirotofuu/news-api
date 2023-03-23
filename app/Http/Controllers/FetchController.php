@@ -108,11 +108,9 @@ class FetchController extends Controller
     // 詳細
     public function showArticle($article){
         $syosai=Article::with('truths')->with('fakes')->find($article);
-        if(Auth::id()!==$syosai->user_id){
             $syosai->update([
                 'view_number'=>$syosai->view_number+1,
-            ]);
-        }
+            ]); 
         return new IndexArticleResource($syosai);
     }
 
